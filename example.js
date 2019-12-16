@@ -1,20 +1,17 @@
 'use strict';
 
-/******* Components ********/
-
-const serviceSum = require('./service-sum');
-const serviceSqr = require('./service-sqr');
+/******* Actions (Dependency Injection) ********/
 
 /*
  * Calculates square root of sum of a and b
 **/
-module.exports = async (req, res) => {
-  const { a, b } = req.query;
-  const sum = await serviceSum(req, a, b);
+module.exports = async context => {
+  const { a, b } = context.parameters;
+  const sum = await context.action('sum', a, b);
   
-  const sqr = await serviceSqr(req, sum);
+  const sqr = await context.action('sqr', sum);
   
-  res.json({
+  return {
     result: sqr
-  });
+  };
 };
